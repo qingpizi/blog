@@ -2,13 +2,13 @@
 
 
 
-### [\#](https://nfangxu.com/linux/free-https-certificate-let-s-encrypt-installation-tutorial.html#%E7%AC%AC%E9%9B%B6%E6%AD%A5%EF%BC%9A%E6%9C%AC%E6%96%87%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83)第零步：本文使用环境 <a id="&#x7B2C;&#x96F6;&#x6B65;&#xFF1A;&#x672C;&#x6587;&#x4F7F;&#x7528;&#x73AF;&#x5883;"></a>
+### 第零步：本文使用环境 <a id="&#x7B2C;&#x96F6;&#x6B65;&#xFF1A;&#x672C;&#x6587;&#x4F7F;&#x7528;&#x73AF;&#x5883;"></a>
 
 * 阿里云服务器
 * ubuntu 16.04
 * nginx
 
-### [\#](https://nfangxu.com/linux/free-https-certificate-let-s-encrypt-installation-tutorial.html#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%88%9B%E5%BB%BA-let-s-encrypt-%E8%B4%A6%E5%8F%B7)第一步：创建 Let's Encrypt 账号 <a id="&#x7B2C;&#x4E00;&#x6B65;&#xFF1A;&#x521B;&#x5EFA;-let-s-encrypt-&#x8D26;&#x53F7;"></a>
+### 第一步：创建 Let's Encrypt 账号 <a id="&#x7B2C;&#x4E00;&#x6B65;&#xFF1A;&#x521B;&#x5EFA;-let-s-encrypt-&#x8D26;&#x53F7;"></a>
 
 > Let's Encrypt使用一个私钥来进行账号的创建与登陆，因此我们需要使用openssl创建一个account.key。
 
@@ -32,7 +32,7 @@ openssl asn1parse -noout -out private_key.der -genconf <(python conv.py private_
 openssl rsa -in private_key.der -inform der > account.key
 ```
 
-### [\#](https://nfangxu.com/linux/free-https-certificate-let-s-encrypt-installation-tutorial.html#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%88%9B%E5%BB%BA%E5%9F%9F%E5%90%8D%E7%9A%84csr%EF%BC%88certificate-signing-request%EF%BC%89)第二步：创建域名的CSR（CERTIFICATE SIGNING REQUEST） <a id="&#x7B2C;&#x4E8C;&#x6B65;&#xFF1A;&#x521B;&#x5EFA;&#x57DF;&#x540D;&#x7684;csr&#xFF08;certificate-signing-request&#xFF09;"></a>
+### 第二步：创建域名的CSR（CERTIFICATE SIGNING REQUEST） <a id="&#x7B2C;&#x4E8C;&#x6B65;&#xFF1A;&#x521B;&#x5EFA;&#x57DF;&#x540D;&#x7684;csr&#xFF08;certificate-signing-request&#xFF09;"></a>
 
 > Let's Encrypt 使用的ACME协议需要一个CSR文件，可以使用它来重新申请HTTPS证书，接下来我们就可以创建域名CSR，在创建CSR之前，我们需要给我们的域名创建一个私钥（这个和上面的账户私钥无关）。
 
@@ -56,7 +56,7 @@ openssl req -new -sha256 -key domain.key \
 
 > **执行这一步时，需要指定 openssl.cnf 文件，一般这个文件在你的 openssl 安装目录底下。**
 
-### [\#](https://nfangxu.com/linux/free-https-certificate-let-s-encrypt-installation-tutorial.html#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E9%85%8D%E7%BD%AE%E5%9F%9F%E5%90%8D%E9%AA%8C%E8%AF%81)第三步：配置域名验证 <a id="&#x7B2C;&#x4E09;&#x6B65;&#xFF1A;&#x914D;&#x7F6E;&#x57DF;&#x540D;&#x9A8C;&#x8BC1;"></a>
+### 第三步：配置域名验证 <a id="&#x7B2C;&#x4E09;&#x6B65;&#xFF1A;&#x914D;&#x7F6E;&#x57DF;&#x540D;&#x9A8C;&#x8BC1;"></a>
 
 > CA 在签发 DV（Domain Validation）证书时，需要验证域名所有权。传统 CA 的验证方式一般是往 admin@foofish.net 发验证邮件，而 Let's Encrypt 是在你的服务器上生成一个随机验证文件，再通过创建 CSR 时指定的域名访问，如果可以访问则表明你对这个域名有控制权。 首先创建用于存放验证文件的目录，例如：
 
@@ -89,7 +89,7 @@ server {
 
 > **这个验证服务以后更新证书还要用到，需要一直保留。**
 
-### [\#](https://nfangxu.com/linux/free-https-certificate-let-s-encrypt-installation-tutorial.html#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99%E8%AF%81%E4%B9%A6)第四步：获取网站证书 <a id="&#x7B2C;&#x56DB;&#x6B65;&#xFF1A;&#x83B7;&#x53D6;&#x7F51;&#x7AD9;&#x8BC1;&#x4E66;"></a>
+### 第四步：获取网站证书 <a id="&#x7B2C;&#x56DB;&#x6B65;&#xFF1A;&#x83B7;&#x53D6;&#x7F51;&#x7AD9;&#x8BC1;&#x4E66;"></a>
 
 > 先把 acme-tiny 脚本保存到之前的 ssl 目录：
 
@@ -109,7 +109,7 @@ python acme_tiny.py \
 
 > 如果一切正常，当前目录下就会生成一个 signed.crt，这就是申请好的证书文件。
 
-### [\#](https://nfangxu.com/linux/free-https-certificate-let-s-encrypt-installation-tutorial.html#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85%E8%AF%81%E4%B9%A6)第五步：安装证书 <a id="&#x7B2C;&#x4E94;&#x6B65;&#xFF1A;&#x5B89;&#x88C5;&#x8BC1;&#x4E66;"></a>
+### 第五步：安装证书 <a id="&#x7B2C;&#x4E94;&#x6B65;&#xFF1A;&#x5B89;&#x88C5;&#x8BC1;&#x4E66;"></a>
 
 > 证书生成后，就可以把它配置在web 服务器上了，需要注意的是，Nginx需要追加一个Let's Encrypt的中间证书，在 Nginx 配置中，需要把中间证书和网站证书合在一起：
 
@@ -159,7 +159,7 @@ server {
 
 ```
 
-### [\#](https://nfangxu.com/linux/free-https-certificate-let-s-encrypt-installation-tutorial.html#%E7%AC%AC%E5%85%AD%E6%AD%A5%EF%BC%9A%E5%AE%9A%E6%9C%9F%E6%9B%B4%E6%96%B0)第六步：定期更新 <a id="&#x7B2C;&#x516D;&#x6B65;&#xFF1A;&#x5B9A;&#x671F;&#x66F4;&#x65B0;"></a>
+### 第六步：定期更新 <a id="&#x7B2C;&#x516D;&#x6B65;&#xFF1A;&#x5B9A;&#x671F;&#x66F4;&#x65B0;"></a>
 
 > Let’s Encrypt 签发的证书只有90天有效期，但可以通过脚本定期更新。你可以创建了一个自动更新脚本 `cert_refresh.sh` ，内容如下：
 
